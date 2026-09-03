@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Вход — Трекер{% endblock %}
+{% block content %}
+<div class="login-wrap">
+    <div class="login-card">
+        <span class="wordmark">ACTION TRACKER</span>
+        <h1>Вход</h1>
+        {% if error %}
+        <p class="error-msg">{{ error }}</p>
+        {% endif %}
+        <form method="post" action="/login" class="login-form">
+            <label>
+                Email
+                <input type="email" name="email" required autofocus>
+            </label>
+            <label>
+                Пароль
+                <input type="password" name="password" required>
+            </label>
+            <button type="submit">Войти</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+<div id="review-board">
+{% if publish_error %}
+<p class="error-msg">{{ publish_error }}</p>
+{% endif %}
+
+{% if by_meeting %}
+{% for meeting_title, meeting_tasks in by_meeting.items() %}
+<section class="person-block">
+    <span class="eyebrow">ВСТРЕЧА</span>
+    <h2>{{ meeting_title }}</h2>
+    <ul class="task-list">
+        {% for task in meeting_tasks %}
+        {% include "partials/review_row.html" %}
+        {% endfor %}
+    </ul>
+</section>
+{% endfor %}
+{% else %}
+<p class="empty-note">Нет задач, ожидающих проверки.</p>
+{% endif %}
+</div>

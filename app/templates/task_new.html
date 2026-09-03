@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Новая задача — Трекер{% endblock %}
+{% block content %}
+<h1>Добавить задачу вручную</h1>
+
+<form hx-post="/tasks/new" hx-target="#form-result" hx-swap="innerHTML" class="upload-form">
+    <label>
+        Исполнитель
+        <select name="assignee_id" required>
+            <option value="" disabled selected>Выбрать сотрудника</option>
+            {% for user in all_users %}
+            <option value="{{ user.id }}">{{ user.full_name }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>
+        Описание задачи
+        <input type="text" name="description" placeholder="Например: Подготовить КП для клиента" required>
+    </label>
+    <label>
+        Срок (необязательно)
+        <input type="date" name="due_date">
+    </label>
+    <button type="submit">Создать задачу</button>
+</form>
+
+<div id="form-result"></div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% if error %}
+<div class="upload-result error">
+    <span class="status-tag open">ОШИБКА</span>
+    <p>{{ error }}</p>
+</div>
+{% else %}
+<div class="upload-result success">
+    <span class="status-tag done">ГОТОВО</span>
+    <p>Встреча «{{ meeting_title }}» обработана.</p>
+    <p class="result-stats">
+        <span class="stat-tag">{{ tasks_created }} задач создано</span>
+        {% if unresolved_assignees %}
+        <span class="stat-tag warn">{{ unresolved_assignees }} не сопоставлено с пользователем</span>
+        {% endif %}
+    </p>
+    <p class="redirect-note">Переход к задачам…</p>
+</div>
+<script>
+    setTimeout(function () {
+        window.location.href = "/review";
+    }, 1400);
+</script>
+{% endif %}

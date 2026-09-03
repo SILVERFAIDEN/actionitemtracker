@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Добавить сотрудника — Трекер{% endblock %}
+{% block content %}
+<h1>Добавить сотрудника</h1>
+
+<form hx-post="/users" hx-target="#form-result" hx-swap="innerHTML" class="upload-form">
+    <label>
+        Имя и фамилия
+        <input type="text" name="full_name" placeholder="Например: Игорь Выноградов" required>
+    </label>
+    <label>
+        Email
+        <input type="email" name="email" required>
+    </label>
+    <label>
+        Пароль
+        <div class="password-row">
+            <input type="text" name="password" id="password-field" required>
+            <button type="button" class="generate-btn" onclick="generatePassword()">Сгенерировать</button>
+        </div>
+    </label>
+    {% if current_user.is_admin %}
+    <label>
+        Роль
+        <select name="role" required>
+            <option value="member">Сотрудник</option>
+            <option value="manager">Менеджер</option>
+        </select>
+    </label>
+    {% endif %}
+    <button type="submit">Добавить</button>
+</form>
+
+<div id="form-result"></div>
+
+<script>
+function generatePassword() {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+    const array = new Uint32Array(12);
+    crypto.getRandomValues(array);
+    let result = "";
+    for (let i = 0; i < array.length; i++) {
+        result += chars[array[i] % chars.length];
+    }
+    document.getElementById("password-field").value = result;
+}
+</script>
+{% endblock %}

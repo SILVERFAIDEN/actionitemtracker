@@ -1,0 +1,31 @@
+<li class="task {{ 'done' if task.status.value == 'done' else '' }}" id="task-{{ task.id }}">
+    <form
+        hx-post="/tasks/{{ task.id }}/toggle"
+        hx-target="#task-board"
+        hx-swap="outerHTML"
+        class="toggle-form"
+    >
+        <button type="submit" class="checkbox" aria-label="Отметить выполненным">
+            {{ '✓' if task.status.value == 'done' else '' }}
+        </button>
+    </form>
+    <span class="description">{{ task.description }}</span>
+    <span class="status-tag {{ task.status.value }}">{{ task.status.value | upper }}</span>
+    {% if task.due_date %}
+    <span class="due-date">до {{ task.due_date }}</span>
+    {% endif %}
+    <button
+        type="button"
+        class="edit-icon-btn"
+        aria-label="Редактировать задачу"
+        hx-get="/tasks/{{ task.id }}/edit"
+        hx-target="#task-{{ task.id }}"
+        hx-swap="outerHTML"
+    >✎</button>
+    {% if current_user is defined and current_user.role.value == 'manager' %}
+    <form hx-post="/tasks/{{ task.id }}/delete" hx-target="#task-board" hx-swap="outerHTML" hx-confirm="Удалить эту задачу безвозвратно?" class="delete-form">
+        <input type="hidden" name="return_to" value="tasks">
+        <button type="submit" class="delete-btn" aria-label="Удалить задачу">🗑</button>
+    </form>
+    {% endif %}
+</li>

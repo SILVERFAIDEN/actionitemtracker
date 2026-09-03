@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Трекер{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body>
+    {% if current_user %}
+    <header class="topbar">
+        <span class="wordmark">ACTION TRACKER</span>
+        <div class="user-info">
+    <nav class="main-nav">
+        <a href="/tasks" class="nav-link">Главная</a>
+        {% if current_user.role.value == 'manager' %}
+        <a href="/review" class="nav-link">На ревью</a>
+        <a href="/upload" class="nav-link">Загрузить встречу</a>
+        <a href="/tasks/new" class="nav-link">Добавить задачу</a>
+        <a href="/users/new" class="nav-link">Добавить сотрудника</a>
+        {% endif %}
+    </nav>
+    <span class="user-name">{{ current_user.full_name }}</span>
+    <span class="user-role">{{ current_user.role.value }}</span>
+    <a href="/logout" class="logout-link">Выйти</a>
+</div>
+    </header>
+    {% endif %}
+
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

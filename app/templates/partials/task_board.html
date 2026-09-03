@@ -1,0 +1,61 @@
+<div id="task-board">
+{% if resolve_error %}
+<p class="error-msg">{{ resolve_error }}</p>
+{% endif %}
+
+{% for person, person_tasks in grouped.items() %}
+<section class="person-block">
+    <span class="eyebrow">ИСПОЛНИТЕЛЬ</span>
+    <h2>{{ person }}</h2>
+    <ul class="task-list">
+        {% for task in person_tasks %}
+        {% include "partials/task_row.html" %}
+        {% endfor %}
+    </ul>
+</section>
+{% endfor %}
+
+<section class="done-block">
+    <details>
+        <summary>
+            <span class="eyebrow">ВЫПОЛНЕНО</span>
+            <span class="done-count">{{ done_tasks|length }}</span>
+        </summary>
+        {% if done_tasks %}
+        <ul class="task-list">
+            {% for task in done_tasks %}
+            <li class="task done" id="task-{{ task.id }}">
+                <form hx-post="/tasks/{{ task.id }}/toggle" hx-target="#task-board" hx-swap="outerHTML" class="toggle-form">
+                    <button type="submit" class="checkbox" aria-label="Вернуть в работу">✓</button>
+                </form>
+                <span class="assignee-name">{{ task.assignee.full_name if task.assignee else task.raw_assignee_name }}</span>
+                <span class="description">{{ task.description }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <form hx-post="/tasks/clear-done" hx-target="#task-board" hx-swap="outerHTML" hx-confirm="Удалить все выполненные задачи безвозвратно?">
+            <button type="submit" class="clear-btn">Очистить выполненные</button>
+        </form>
+        {% else %}
+        <p class="empty-note">Пока нет выполненных задач.</p>
+        {% endif %}
+    </details>
+</section>
+
+{% if unresolved %}
+<section class="unresolved-block">
+    <span class="eyebrow">ТРЕБУЕТ СОПОСТАВЛЕНИЯ</span>
+    <ul class="task-list">
+        {% for task in unresolved %}
+        {% if current_user.role.value == 'manager' %}
+        {% include "partials/unresolved_edit_row.html" %}
+        {% else %}
+        <li class="task unresolved">
+            <span class="raw-name">{{ task.raw_assignee_name }}</span>
+            <span class="description">{{ task.description }}</span>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}

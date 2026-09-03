@@ -1,0 +1,17 @@
+{% if error %}
+<div class="upload-result error">
+    <span class="status-tag open">ОШИБКА</span>
+    <p>{{ error }}</p>
+</div>
+{% else %}
+<div class="upload-result success">
+    <span class="status-tag done">ГОТОВО</span>
+    <p>{{ message }}</p>
+    <p class="redirect-note">Переход…</p>
+</div>
+<script>
+    setTimeout(function () {
+        window.location.href = "{{ redirect_url }}";
+    }, 1800);
+</script>
+{% endif %}

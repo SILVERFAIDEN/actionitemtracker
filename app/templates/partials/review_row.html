@@ -1,0 +1,29 @@
+<li class="task review-row" id="task-{{ task.id }}">
+    <form
+        hx-post="/tasks/{{ task.id }}/publish"
+        hx-target="#review-board"
+        hx-swap="outerHTML"
+        class="edit-form"
+    >
+        <div class="edit-fields">
+            <input type="text" name="description" value="{{ task.description }}" required>
+            <input type="date" name="due_date" value="{{ task.due_date if task.due_date else '' }}">
+            <select name="assignee_id" required>
+                <option value="" disabled {{ 'selected' if not task.assignee_id else '' }}>Выбрать сотрудника</option>
+                {% for user in all_users %}
+                <option value="{{ user.id }}" {{ 'selected' if task.assignee_id == user.id else '' }}>{{ user.full_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% if task.raw_assignee_name %}
+        <span class="raw-name-note">Из транскрипта: «{{ task.raw_assignee_name }}»</span>
+        {% endif %}
+        <div class="edit-actions">
+            <button type="submit" class="save-btn">Опубликовать</button>
+        </div>
+    </form>
+    <form hx-post="/tasks/{{ task.id }}/delete" hx-target="#review-board" hx-swap="outerHTML" hx-confirm="Удалить эту задачу безвозвратно?" class="delete-form">
+        <input type="hidden" name="return_to" value="review">
+        <button type="submit" class="delete-btn" aria-label="Удалить задачу">🗑</button>
+    </form>
+</li>

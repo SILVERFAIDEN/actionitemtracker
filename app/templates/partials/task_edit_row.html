@@ -1,0 +1,33 @@
+<li class="task editing" id="task-{{ task.id }}">
+    <form
+        hx-post="/tasks/{{ task.id }}/edit"
+        hx-target="#task-board"
+        hx-swap="outerHTML"
+        class="edit-form"
+    >
+        <div class="edit-fields">
+            <input type="text" name="description" value="{{ task.description }}" required>
+            <input type="date" name="due_date" value="{{ task.due_date if task.due_date else '' }}">
+            {% if current_user.role.value == 'manager' %}
+            <select name="assignee_id">
+                {% for user in all_users %}
+                <option value="{{ user.id }}" {{ 'selected' if task.assignee_id == user.id else '' }}>{{ user.full_name }}</option>
+                {% endfor %}
+            </select>
+            {% else %}
+            <input type="hidden" name="assignee_id" value="{{ task.assignee_id }}">
+            <span class="assignee-readonly">{{ task.assignee.full_name if task.assignee else task.raw_assignee_name }}</span>
+            {% endif %}
+        </div>
+        <div class="edit-actions">
+            <button type="submit" class="save-btn">Сохранить</button>
+            <button
+                type="button"
+                class="cancel-btn"
+                hx-get="/tasks/{{ task.id }}/view"
+                hx-target="#task-{{ task.id }}"
+                hx-swap="outerHTML"
+            >Отмена</button>
+        </div>
+    </form>
+</li>

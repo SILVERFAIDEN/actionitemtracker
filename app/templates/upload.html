@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Загрузка встречи — Трекер{% endblock %}
+{% block content %}
+<h1>Загрузить транскрипт встречи</h1>
+
+<form
+    hx-post="/meetings/upload"
+    hx-target="#upload-result"
+    hx-swap="innerHTML"
+    hx-encoding="multipart/form-data"
+    hx-indicator="#upload-spinner"
+    class="upload-form"
+>
+    <label>
+        Название встречи
+        <input type="text" name="meeting_title" placeholder="Например: Созвон по поставке — 22.07" required>
+    </label>
+    <label>
+        Файл транскрипта (PDF)
+        <input type="file" name="file" accept=".pdf" required>
+    </label>
+    <button type="submit" hx-disabled-elt="this">Загрузить и извлечь задачи</button>
+</form>
+
+<div id="upload-spinner" class="htmx-indicator upload-spinner">
+    <span class="spinner"></span>
+    Обрабатываем транскрипт — это может занять до минуты…
+</div>
+
+<div id="upload-result"></div>
+{% endblock %}

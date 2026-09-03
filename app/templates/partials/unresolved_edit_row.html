@@ -1,0 +1,23 @@
+<li class="task unresolved editing" id="task-{{ task.id }}">
+    <form
+        hx-post="/tasks/{{ task.id }}/edit"
+        hx-target="#task-board"
+        hx-swap="outerHTML"
+        class="edit-form"
+    >
+        <span class="raw-name">Из транскрипта: «{{ task.raw_assignee_name }}»</span>
+        <div class="edit-fields">
+            <input type="text" name="description" value="{{ task.description }}" required>
+            <input type="date" name="due_date" value="{{ task.due_date if task.due_date else '' }}">
+            <select name="assignee_id" required>
+                <option value="" disabled {{ 'selected' if not task.assignee_id else '' }}>Выбрать сотрудника</option>
+                {% for user in all_users %}
+                <option value="{{ user.id }}">{{ user.full_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="edit-actions">
+            <button type="submit" class="save-btn">Сохранить и назначить</button>
+        </div>
+    </form>
+</li>
