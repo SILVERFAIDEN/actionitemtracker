@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+psycopg2-binary
+python-dotenv
+passlib[bcrypt]
+itsdangerous
+alembic
+python-multipart
+pdfplumber
+rapidfuzz
+requests
+jinja2
